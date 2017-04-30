@@ -35,9 +35,38 @@ namespace NNTPReader
 		public Form1()
 		{
 			InitializeComponent();
+			Connect();
 		}
 
 		private void btnGo_Click(object sender, EventArgs e)
+		{
+			Connect();
+		}
+
+		private void btnGetNews_Click(object sender, EventArgs e)
+		{
+			GetNews();
+		}
+
+		private void btnNext_Click(object sender, EventArgs e)
+		{
+			NextArticle();
+
+		}
+
+		private void lstNewsgroups_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			GetNews();
+			//NextArticle();
+		}
+
+		public static byte[] StringToByteArr(string str)
+		{
+			System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+			return encoding.GetBytes(str);
+		}
+
+		private void Connect()
 		{
 			// Open the socket to the server
 			tcpClient = new System.Net.Sockets.TcpClient(txtNNTPServer.Text, 119);
@@ -82,30 +111,24 @@ namespace NNTPReader
 				if (ListLine.Length > 3 && ListLine.Substring(0, 3) == "215")
 				{
 					// Add the status response line to the log window
-					txtLog.Text += ListLine + "\r\n";
+					txtLog.AppendText(ListLine + "\r\n");
 				}
 				else
 				{
 					// Add the newsgroup to the combobox
 					string[] Newsgroup = ListLine.Split(' ');
-					cmbNewsgroups.Items.Add(Newsgroup[0]);
+					lstNewsgroups.Items.Add(Newsgroup[0]);
 				}
 			}
 		}
 
-		public static byte[] StringToByteArr(string str)
-		{
-			System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-			return encoding.GetBytes(str);
-		}
-
-		private void btnGetNews_Click(object sender, EventArgs e)
+		private void GetNews()
 		{
 			// If a newsgroup is selected in the ComboBox
-			if (cmbNewsgroups.SelectedIndex != -1)
+			if (lstNewsgroups.SelectedIndex != -1)
 			{
 				// Request a certain newsgroup
-				byteSendInfo = StringToByteArr("GROUP " + cmbNewsgroups.SelectedItem.ToString() + "\r\n");
+				byteSendInfo = StringToByteArr("GROUP " + lstNewsgroups.SelectedItem.ToString() + "\r\n");
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				Response = "";
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
@@ -113,24 +136,24 @@ namespace NNTPReader
 				// Split the information about the newsgroup by blank spaces
 				string[] Group = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
 				// Show information about the newsgroup in the txtLog TextBox
-				Response += Group[1] + " messages in the group (messages " + Group[2] + " through " + Group[3] + ")\r\n";
-				txtLog.Text += Response;
+				if (Group.Length > 0)
+				{
+					Response += Group[1] + " messages in the group (messages " + Group[2] + " through " + Group[3] + ")\r\n";
+					// The ID of the first article in this newsgroup
+					firstID = Convert.ToInt32(Group[2]);
+					// The ID of the last article in this newsgroup
+					lastID = Convert.ToInt32(Group[3]);
+				}
+				else
+					Response += "Unexpected answer form server";
+				txtLog.AppendText(Response);
 				Response = "";
-				// The ID of the first article in this newsgroup
-				firstID = Convert.ToInt32(Group[2]);
-				// The ID of the last article in this newsgroup
-				lastID = Convert.ToInt32(Group[3]);
+
 			}
 			else
 			{
 				MessageBox.Show("Please connect to a server and select a newsgroup from the dropdown list first.", "Newsgroup retrieval", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-		}
-
-		private void btnNext_Click(object sender, EventArgs e)
-		{
-			int code = NextArticle();
-			btnNext.Text = code.ToString();
 		}
 
 		/// <summary>
@@ -140,12 +163,13 @@ namespace NNTPReader
 		/// 3 - not connected/no newsgroup.
 		/// </summary>
 		/// <returns></returns>
-		private int NextArticle()
+		private void NextArticle()
 		{
-			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && cmbNewsgroups.SelectedIndex != -1)
+			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
 			{
-				// Get the header
 				txtHead.Text = "";
+				txtBody.Text = "";
+				// Get the header
 				// Initialize the buffer to 2048 bytes
 				downBuffer = new byte[2048];
 				// Request the headers of the article
@@ -160,34 +184,28 @@ namespace NNTPReader
 					if (NewChunk.Substring(0, 3) == "423")
 					{
 						// Ready for the next article, unless there is nothing else there...
-						if (firstID < lastID)
-						{
-							firstID++;
-						}
-						//
 						if (firstID >= lastID)
 						{
-							return 2;
+							txtLog.AppendText("2 Last article\r\n");
+							return;
 						}
-						// Next article please
-						//if (failCount < 100)
-						//{
-						NextArticle();
-						//}
-						//failCount++;
-						// End this method because it's retrieving a nonexistent article
-						return 1;
+						else
+						{
+							txtLog.AppendText("1 No such article\r\n");
+							// Next article please
+							firstID++;
+							NextArticle();
+							// End this method because it's retrieving a nonexistent article
+							break;
+						}
 					}
 					else if (NewChunk.Substring(NewChunk.Length - 5, 5) == "\r\n.\r\n")
 					{
 						// If the last thing in the buffer is "\r\n.\r\n" the message's finished and non-existent messages count is reset
-						//failCount = 0;
 						break;
 					}
 				}
-
 				// Get the body
-				txtBody.Text = "";
 				// Initialize the buffer to 2048 bytes
 				downBuffer = new byte[2048];
 				// Request the headers of the article
@@ -199,6 +217,11 @@ namespace NNTPReader
 					NewChunk = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 					txtBody.Text += NewChunk;
 					// If the last thing in the buffer is "\r\n.\r\n" the message's finished
+					if (NewChunk.Length < 5)
+					{
+						break;
+						//txtLog.AppendText("Short chunk at the end of message.\r\n");
+					}
 					if (NewChunk.Substring(NewChunk.Length - 5, 5) == "\r\n.\r\n")
 					{
 						break;
@@ -209,20 +232,25 @@ namespace NNTPReader
 				if (firstID < lastID)
 				{
 					firstID++;
-					return 0;
+					txtLog.AppendText("0 Ready for the next article\r\n");
 				}
 				else
 				{
-					return 2;
+					txtLog.AppendText("2 Last article\r\n");
 				}
 			}
 			else
 			{
 				MessageBox.Show("Please select a newsgroup from the dropdown list and click on 'Get News' first.", "Newsgroup retrieval", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return 3;
+				txtLog.AppendText("3 Not connected/Newsgroup not selected\r\n");
 			}
 		}
 
+		/// <summary>
+		/// Quit server when closing (Not working)
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			/*
@@ -239,6 +267,27 @@ namespace NNTPReader
 				MessageBox.Show(mess, "test", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			*/
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			// Request a certain newsgroup
+			byteSendInfo = StringToByteArr("NEXT\r\n");
+			strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
+			bytesSize = strRemote.Read(downBuffer, 0, 2048);
+			string[] Group = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
+			// Show information about the newsgroup in the txtLog TextBox
+			if (Group.Length > 0 && Group[0] == "223")
+			{
+				Response += "Code is " + Group[0] + ", next article ID is " + Group[1] + ".\r\n";
+				// The ID of the first article in this newsgroup
+				firstID = Convert.ToInt32(Group[1]);
+			}
+			else
+				Response += "Unexpected answer form server";
+			txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
+			txtLog.AppendText(Response + firstID + "\r\n");
+			Response = "";
 		}
 	}
 }
