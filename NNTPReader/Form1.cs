@@ -253,20 +253,20 @@ namespace NNTPReader
 		/// <param name="e"></param>
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			/*
+			
 			if (tcpClient != null && tcpClient.Connected == true)
 			{
 				downBuffer = new byte[2048];
 				// Request a certain newsgroup
-				byteSendInfo = StringToByteArr("QUIT"); //Чёт оно не работает
+				byteSendInfo = StringToByteArr("QUIT\r\n");
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				Response = "";
-				//bytesSize = strRemote.Read(downBuffer, 0, 2048);
+				bytesSize = strRemote.Read(downBuffer, 0, 2048);
 				Response = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 				string mess = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 				MessageBox.Show(mess, "test", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			*/
+			
 		}
 
 		private void button1_Click(object sender, EventArgs e)
