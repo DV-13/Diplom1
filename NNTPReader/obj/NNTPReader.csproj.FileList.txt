@@ -1,8 +1,0 @@
-bin\Debug\NNTPReader.exe
-bin\Debug\NNTPReader.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\NNTPReader.Form1.resources
-obj\Debug\NNTPReader.Properties.Resources.resources
-obj\Debug\NNTPReader.csproj.GenerateResource.Cache
-obj\Debug\NNTPReader.exe
-obj\Debug\NNTPReader.pdb

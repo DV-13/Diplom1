@@ -1,8 +1,0 @@
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\obj\Debug\NNTPReader.exe
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\obj\Debug\NNTPReader.pdb
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\bin\Debug\NNTPReader.exe
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\bin\Debug\NNTPReader.pdb
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\obj\Debug\NNTPReader.csprojResolveAssemblyReference.cache
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\obj\Debug\NNTPReader.Form1.resources
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\obj\Debug\NNTPReader.Properties.Resources.resources
-C:\Users\gjhne\Documents\Visual Studio 2015\Projects\NNTPReader\NNTPReader\obj\Debug\NNTPReader.csproj.GenerateResource.Cache
