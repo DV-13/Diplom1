@@ -48,16 +48,16 @@ namespace NNTPReader
 			GetNews();
 		}
 
-		private void btnNext_Click(object sender, EventArgs e) //Не отображает последнюю новость!
+		private void btnNext_Click(object sender, EventArgs e)
 		{
-			if (firstID <= lastID)
+			if (firstID < lastID)
 			{
 				GetArticle();
-				if (firstID < lastID)
-					NextArticle();
+				NextArticle();
 			}
 			else
 			{
+				GetArticle();
 				txtLog.AppendText("002 Last article\r\n");
 			}
 		}
@@ -302,7 +302,8 @@ namespace NNTPReader
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
 				Response = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 				string mess = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
-				MessageBox.Show(mess, "test", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				txtLog.AppendText(mess);
+				//MessageBox.Show(mess, "test", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 	}
