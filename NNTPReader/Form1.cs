@@ -29,8 +29,6 @@ namespace NNTPReader
 		int lastID;
 		// Stores chunks of the articles from the buffer
 		string NewChunk;
-		// Counter of non-existent messages
-		//int failCount = 0;
 
 		public Form1()
 		{
@@ -48,24 +46,37 @@ namespace NNTPReader
 			GetNews();
 		}
 
-		private void btnNext_Click(object sender, EventArgs e)
+		private void btnNext_Click(object sender, EventArgs e) //Надо вынести в отдельную функцию
 		{
-			if (firstID < lastID)
+			if (NextArticle())
 			{
-				GetArticle();
-				NextArticle();
+				GetHead();
+				GetBody();
 			}
-			else
-			{
-				GetArticle();
-				txtLog.AppendText("002 Last article\r\n");
-			}
+			//else
+			//{
+			//	txtLog.AppendText("002 Last article\r\n");
+			//}
+
+			//if (firstID < lastID)
+			//{
+			//	GetHead();
+			//	GetBody();
+			//	NextArticle();
+			//}
+			//else
+			//{
+			//	GetHead(); 
+			//	GetBody();
+			//	txtLog.AppendText("002 Last article\r\n");
+			//}
 		}
 
 		private void lstNewsgroups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			GetNews();
 			//NextArticle();
+			btnNext_Click(sender, e);
 		}
 
 		public static byte[] StringToByteArr(string str)
@@ -169,8 +180,9 @@ namespace NNTPReader
 			}
 		}
 
-		private void NextArticle()
+		private bool NextArticle()
 		{
+			bool ret = false;
 			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
 			{
 				// Request the next article
@@ -184,15 +196,21 @@ namespace NNTPReader
 					Response += Group[0] + " Next article ID is " + Group[1] + "\r\n";
 					// The ID of the next article
 					firstID = Convert.ToInt32(Group[1]);
+					ret = true;
 				}
 				else if (Group.Length > 0 && Group[0] == "421")
+				{
 					Response += "421 Last article\r\n";
+				}
 				else
+				{
 					Response += "Unexpected answer form server\r\n";
+				}
 				//txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
 				txtLog.AppendText(Response /*+ firstID + "\r\n"*/);
 				Response = "";
 			}
+			return ret;
 		}
 
 		/// <summary>
@@ -202,10 +220,11 @@ namespace NNTPReader
 		/// 3 - not connected/no newsgroup.
 		/// </summary>
 		/// <returns></returns>
-		private void GetArticle()
+		private void GetHead()
 		{
 			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
 			{
+				string headTmp = "";
 				// Get the header
 				txtHead.Text = "";
 				// Initialize the buffer to 2048 bytes
@@ -217,7 +236,7 @@ namespace NNTPReader
 				while ((bytesSize = strRemote.Read(downBuffer, 0, downBuffer.Length)) > 0)
 				{
 					NewChunk = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
-					txtHead.Text += NewChunk;
+					headTmp += NewChunk;
 					// No such article in the group
 					if (NewChunk.Substring(0, 3) == "423")
 					{
@@ -234,7 +253,7 @@ namespace NNTPReader
 							//firstID++;
 							//NextArticle();
 							// End this method because it's retrieving a nonexistent article
-							break;
+							return;
 						}
 					}
 					else if (NewChunk.Substring(NewChunk.Length - 5, 5) == "\r\n.\r\n")
@@ -243,6 +262,23 @@ namespace NNTPReader
 						break;
 					}
 				}
+				txtHead.Text = headTmp;
+				//return true;
+			}
+			else
+			{
+				MessageBox.Show("Please select a newsgroup from the dropdown list and click on 'Get News' first.", "Newsgroup retrieval", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				txtLog.AppendText("003 Not connected/Newsgroup not selected\r\n");
+				//return false;
+			}
+		}
+
+
+		private void GetBody()
+		{
+			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
+			{
+				string bodyTmp = "";
 				// Get the body
 				txtBody.Text = "";
 				// Initialize the buffer to 2048 bytes
@@ -254,7 +290,7 @@ namespace NNTPReader
 				while ((bytesSize = strRemote.Read(downBuffer, 0, downBuffer.Length)) > 0)
 				{
 					NewChunk = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
-					txtBody.Text += NewChunk;
+					bodyTmp += NewChunk;
 					// If the last thing in the buffer is "\r\n.\r\n" the message's finished
 					if (NewChunk.Length < 5)
 					{
@@ -267,6 +303,7 @@ namespace NNTPReader
 					}
 				}
 				txtLog.AppendText("000 Displaying article\r\n");
+				txtBody.Text = bodyTmp;
 				// Ready for the next article, unless there is nothing else there...
 				//if (firstID < lastID)
 				//{
@@ -286,7 +323,7 @@ namespace NNTPReader
 		}
 
 		/// <summary>
-		/// Quit server when closing (Not working)
+		/// Quit server when closing
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
