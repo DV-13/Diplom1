@@ -50,8 +50,8 @@ namespace NNTPReader
 		{
 			if (NextArticle())
 			{
-				GetHead();
-				GetBody();
+				txtHead.Text = GetHead();
+				txtBody.Text = GetBody();
 			}
 			//else
 			//{
@@ -76,7 +76,6 @@ namespace NNTPReader
 		{
 			GetNews();
 			//NextArticle();
-			btnNext_Click(sender, e);
 		}
 
 		public static byte[] StringToByteArr(string str)
@@ -220,7 +219,7 @@ namespace NNTPReader
 		/// 3 - not connected/no newsgroup.
 		/// </summary>
 		/// <returns></returns>
-		private void GetHead()
+		private string GetHead()
 		{
 			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
 			{
@@ -244,7 +243,7 @@ namespace NNTPReader
 						if (firstID >= lastID)
 						{
 							txtLog.AppendText("002 Last article\r\n");
-							return;
+							return null;
 						}
 						else
 						{
@@ -253,7 +252,7 @@ namespace NNTPReader
 							//firstID++;
 							//NextArticle();
 							// End this method because it's retrieving a nonexistent article
-							return;
+							return null;
 						}
 					}
 					else if (NewChunk.Substring(NewChunk.Length - 5, 5) == "\r\n.\r\n")
@@ -262,19 +261,19 @@ namespace NNTPReader
 						break;
 					}
 				}
-				txtHead.Text = headTmp;
-				//return true;
+				//txtHead.Text = headTmp;
+				return headTmp;
 			}
 			else
 			{
 				MessageBox.Show("Please select a newsgroup from the dropdown list and click on 'Get News' first.", "Newsgroup retrieval", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				txtLog.AppendText("003 Not connected/Newsgroup not selected\r\n");
-				//return false;
+				return null;
 			}
 		}
 
 
-		private void GetBody()
+		private string GetBody()
 		{
 			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
 			{
@@ -303,7 +302,8 @@ namespace NNTPReader
 					}
 				}
 				txtLog.AppendText("000 Displaying article\r\n");
-				txtBody.Text = bodyTmp;
+				//txtBody.Text = bodyTmp;
+				return bodyTmp;
 				// Ready for the next article, unless there is nothing else there...
 				//if (firstID < lastID)
 				//{
@@ -319,6 +319,15 @@ namespace NNTPReader
 			{
 				MessageBox.Show("Please select a newsgroup from the dropdown list and click on 'Get News' first.", "Newsgroup retrieval", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				txtLog.AppendText("003 Not connected/Newsgroup not selected\r\n");
+				return null;
+			}
+		}
+
+		private void GetHeads()
+		{
+			while (NextArticle())
+			{
+
 			}
 		}
 
