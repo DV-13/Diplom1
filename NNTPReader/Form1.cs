@@ -79,7 +79,7 @@ namespace NNTPReader
 			{
 				tcpClient = new TcpClient(txtNNTPServer.Text, 119);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				txtLog.AppendText("Failed to connect to server\r\n" + ex + "\r\n");
 				return;
@@ -88,7 +88,7 @@ namespace NNTPReader
 			// Read the bytes
 			bytesSize = strRemote.Read(downBuffer, 0, 2048);
 			// Retrieve the response
-			Response = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
+			Response = Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 			// Just as in HTTP, if code 200 is not returned, something's not right
 			if (Response.Substring(0, 3) != "200")
 			{
@@ -157,7 +157,7 @@ namespace NNTPReader
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
 				//Response = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 				// Split the information about the newsgroup by blank spaces
-				string[] Group = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
+				string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
 				// Show information about the newsgroup in the txtLog TextBox
 				if (Group.Length > 0)
 				{
@@ -195,7 +195,7 @@ namespace NNTPReader
 				byteSendInfo = StringToByteArr("NEXT\r\n");
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
-				string[] Group = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
+				string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
 				// Show information about the article in the txtLog TextBox
 				if (Group.Length > 0 && Group[0] == "223")
 				{
@@ -240,7 +240,7 @@ namespace NNTPReader
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				while ((bytesSize = strRemote.Read(downBuffer, 0, downBuffer.Length)) > 0)
 				{
-					NewChunk = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
+					NewChunk = Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 					headTmp += NewChunk;
 					// No such article in the group
 					if (NewChunk.Substring(0, 3) == "423")
@@ -296,7 +296,7 @@ namespace NNTPReader
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				while ((bytesSize = strRemote.Read(downBuffer, 0, downBuffer.Length)) > 0)
 				{
-					NewChunk = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
+					NewChunk = Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
 					bodyTmp += NewChunk;
 					// If the last thing in the buffer is "\r\n.\r\n" the message's finished
 					if (NewChunk.Length < 5)
@@ -388,6 +388,9 @@ namespace NNTPReader
 		private void GetHeads()
 		{
 			lstHeads.Items.Clear();
+			tableHeads.Controls.Clear();
+			//tableHeads.RowCount = 0;
+			//tableHeads.Height = 20;
 			int i = 0;
 			while (NextArticle() && (i <= 100))
 			{
@@ -401,6 +404,12 @@ namespace NNTPReader
 				CutString(hTemp[3], 35)
 				));
 				i++;
+				//tableHeads.RowCount++;
+				//tableHeads.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+				tableHeads.Controls.Add(new Label() { Text = hTemp[0], Anchor = AnchorStyles.Left, AutoSize = true }, 0, i + 1);
+				tableHeads.Controls.Add(new Label() { Text = hTemp[1], Anchor = AnchorStyles.Left, AutoSize = true }, 1, i + 1);
+				tableHeads.Controls.Add(new Label() { Text = hTemp[2], Anchor = AnchorStyles.Left, AutoSize = true }, 2, i + 1);
+				tableHeads.Controls.Add(new Label() { Text = hTemp[3], Anchor = AnchorStyles.Left, AutoSize = true }, 3, i + 1);
 			}
 		}
 
@@ -419,7 +428,7 @@ namespace NNTPReader
 				byteSendInfo = StringToByteArr("QUIT\r\n");
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
-				txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
+				txtLog.AppendText(Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
 			}
 		}
 

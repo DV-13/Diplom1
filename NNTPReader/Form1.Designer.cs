@@ -212,17 +212,17 @@ namespace NNTPReader
 			this.tableHeads.AutoSize = true;
 			this.tableHeads.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.tableHeads.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-			this.tableHeads.ColumnCount = 3;
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+			this.tableHeads.ColumnCount = 4;
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
 			this.tableHeads.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableHeads.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
 			this.tableHeads.Location = new System.Drawing.Point(0, 0);
 			this.tableHeads.Name = "tableHeads";
 			this.tableHeads.RowCount = 1;
-			this.tableHeads.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableHeads.Size = new System.Drawing.Size(1089, 22);
+			this.tableHeads.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+			this.tableHeads.Size = new System.Drawing.Size(1089, 23);
 			this.tableHeads.TabIndex = 18;
 			// 
 			// panel1
