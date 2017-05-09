@@ -29,6 +29,8 @@ namespace NNTPReader
 		int lastID;
 		// Stores chunks of the articles from the buffer
 		string NewChunk;
+		// Страница списка заголовков
+		int headPage = 1;
 
 		public Form1()
 		{
@@ -46,48 +48,42 @@ namespace NNTPReader
 			GetNews();
 		}
 
-		private void btnNext_Click(object sender, EventArgs e) //Надо вынести в отдельную функцию
+		private void btnNext_Click(object sender, EventArgs e)
 		{
 			if (NextArticle())
 			{
 				txtHead.Text = GetHead();
 				txtBody.Text = GetBody();
 			}
-			//else
-			//{
-			//	txtLog.AppendText("002 Last article\r\n");
-			//}
-
-			//if (firstID < lastID)
-			//{
-			//	GetHead();
-			//	GetBody();
-			//	NextArticle();
-			//}
-			//else
-			//{
-			//	GetHead(); 
-			//	GetBody();
-			//	txtLog.AppendText("002 Last article\r\n");
-			//}
 		}
 
 		private void lstNewsgroups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			GetNews();
-			//NextArticle();
+			GetHeads();
 		}
 
 		public static byte[] StringToByteArr(string str)
 		{
-			System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+			ASCIIEncoding encoding = new ASCIIEncoding();
 			return encoding.GetBytes(str);
 		}
 
+		/// <summary>
+		/// Connect to the server
+		/// </summary>
 		private void Connect()
 		{
 			// Open the socket to the server
-			tcpClient = new System.Net.Sockets.TcpClient(txtNNTPServer.Text, 119);
+			try
+			{
+				tcpClient = new TcpClient(txtNNTPServer.Text, 119);
+			}
+			catch(Exception ex)
+			{
+				txtLog.AppendText("Failed to connect to server\r\n" + ex + "\r\n");
+				return;
+			}
 			strRemote = tcpClient.GetStream();
 			// Read the bytes
 			bytesSize = strRemote.Read(downBuffer, 0, 2048);
@@ -125,6 +121,7 @@ namespace NNTPReader
 				//	break;
 				//}
 			}
+			lstNewsgroups.Items.Clear();
 			// Split lines into an array
 			string[] ListLines = Response.Split('\n');
 			// Loop line by line
@@ -145,6 +142,9 @@ namespace NNTPReader
 			}
 		}
 
+		/// <summary>
+		/// Get list of news
+		/// </summary>
 		private void GetNews()
 		{
 			// If a newsgroup is selected in the ComboBox
@@ -179,10 +179,17 @@ namespace NNTPReader
 			}
 		}
 
+		/// <summary>
+		/// Get ID of next article
+		/// </summary>
+		/// <returns>
+		/// True - OK
+		/// False - Not OK
+		/// </returns>
 		private bool NextArticle()
 		{
 			bool ret = false;
-			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
+			if (tcpClient != null && tcpClient.Connected == true && lstNewsgroups.SelectedIndex != -1)
 			{
 				// Request the next article
 				byteSendInfo = StringToByteArr("NEXT\r\n");
@@ -203,7 +210,7 @@ namespace NNTPReader
 				}
 				else
 				{
-					Response += "Unexpected answer form server\r\n";
+					Response += "Unexpected answer form server/No articles\r\n";
 				}
 				//txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
 				txtLog.AppendText(Response /*+ firstID + "\r\n"*/);
@@ -213,12 +220,11 @@ namespace NNTPReader
 		}
 
 		/// <summary>
-		/// 0 - ok,
-		/// 1 - no article,
-		/// 2 - last article,
-		/// 3 - not connected/no newsgroup.
+		/// Get head of article
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>
+		/// Head of article
+		/// </returns>
 		private string GetHead()
 		{
 			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
@@ -248,9 +254,6 @@ namespace NNTPReader
 						else
 						{
 							txtLog.AppendText("001 No such article\r\n");
-							// Next article please
-							//firstID++;
-							//NextArticle();
 							// End this method because it's retrieving a nonexistent article
 							return null;
 						}
@@ -272,10 +275,15 @@ namespace NNTPReader
 			}
 		}
 
-
+		/// <summary>
+		/// Get body of article
+		/// </summary>
+		/// <returns>
+		/// Body of article
+		/// </returns>
 		private string GetBody()
 		{
-			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
+			if (tcpClient != null && tcpClient.Connected == true && lstNewsgroups.SelectedIndex != -1)
 			{
 				string bodyTmp = "";
 				// Get the body
@@ -304,16 +312,6 @@ namespace NNTPReader
 				txtLog.AppendText("000 Displaying article\r\n");
 				//txtBody.Text = bodyTmp;
 				return bodyTmp;
-				// Ready for the next article, unless there is nothing else there...
-				//if (firstID < lastID)
-				//{
-				//	//firstID++;
-				//	txtLog.AppendText("000 Ready for the next article\r\n");
-				//}
-				//else
-				//{
-				//	txtLog.AppendText("002 Last article\r\n");
-				//}
 			}
 			else
 			{
@@ -322,17 +320,93 @@ namespace NNTPReader
 				return null;
 			}
 		}
+		private string[] formatHead(string inHead)
+		{
+			string[] outHead = new string[] { "", "", "", "" };
+			string[] headTemp = inHead.Split('\n');
+			foreach (string headChunk in headTemp)
+			{
+				if (headChunk.Length > 2)
+					if (headChunk.Substring(0, 3) == "221")
+					{
+						outHead[0] = headChunk.Split(' ')[1];
+					}
+				if (headChunk.Length > 4)
+					if (headChunk.Substring(0, 5) == "From:")
+					{
+						outHead[1] = headChunk;
+					}
+				if (headChunk.Length > 7)
+					if (headChunk.Substring(0, 8) == "Subject:")
+					{
+						outHead[2] = headChunk;
+					}
+				if (headChunk.Length > 4)
+					if (headChunk.Substring(0, 5) == "Date:")
+					{
+						outHead[3] = headChunk;
+					}
+			}
+			return outHead;
+		}
+		/*
+		private string formatHead(string inHead)
+		{
+			string outHead = "";
+			string[] headTemp = inHead.Split('\n');
+			foreach (string headChunk in headTemp)
+			{
+				if (headChunk.Length > 2)
+					if (headChunk.Substring(0, 3) == "221")
+					{
+						outHead += headChunk.Split(' ')[1] + "\t";
+					}
+				if (headChunk.Length > 4)
+					if (headChunk.Substring(0, 5) == "From:")
+					{
+						outHead += headChunk + "\t";//(headChunk.Substring(6, headChunk.Length));
+					}
+				if (headChunk.Length > 7)
+					if (headChunk.Substring(0, 8) == "Subject:")
+					{
+						outHead += headChunk + "\t";//(headChunk.Substring(9, headChunk.Length));
+					}
+				if (headChunk.Length > 4)
+					if (headChunk.Substring(0, 5) == "Date:")
+					{
+						outHead += headChunk;//(headChunk.Substring(6, headChunk.Length));
+					}
+			}
+			return outHead;
+		}
+		*/
 
+
+		/// <summary>
+		/// Get list of heads
+		/// </summary>
 		private void GetHeads()
 		{
-			while (NextArticle())
+			lstHeads.Items.Clear();
+			int i = 0;
+			while (NextArticle() && (i <= 100))
 			{
-
+				string[] hTemp = formatHead(GetHead());
+				lstHeads.Items.Add(
+				string.Format(
+				"{0, -8} {1, -50} {2, -50} {3, -30}",
+				hTemp[0],
+				CutString(hTemp[1], 35),
+				CutString(hTemp[2], 35),
+				CutString(hTemp[3], 35)
+				));
+				i++;
 			}
 		}
 
+
 		/// <summary>
-		/// Quit server when closing
+		/// Quit server when exiting program
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -344,13 +418,43 @@ namespace NNTPReader
 				// Request a certain newsgroup
 				byteSendInfo = StringToByteArr("QUIT\r\n");
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
-				Response = "";
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
-				Response = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
-				string mess = System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize);
-				txtLog.AppendText(mess);
-				//MessageBox.Show(mess, "test", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
 			}
+		}
+
+		private void headPageR_Click(object sender, EventArgs e)
+		{
+			headPage++;
+			lblHeadPage.Text = "Страница " + headPage;
+			headPageL.Enabled = true;
+			tableHeads.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+			tableHeads.RowCount++;
+
+		}
+
+		private void headPageL_Click(object sender, EventArgs e)
+		{
+			headPage--;
+			lblHeadPage.Text = "Страница " + headPage;
+			if (headPage == 1)
+				headPageL.Enabled = false;
+			tableHeads.RowCount--;
+			tableHeads.Height -= 20;
+		}
+
+		public string CutString(string str, int length)
+		{
+			if (str.Length > length)
+				return str.Substring(0, length - 3) + "...";
+			else if (str.Length < length)
+			{
+				for (int i = 0; str.Length <= length; i++)
+				{
+					str += "_";
+				}
+			}
+			return str;
 		}
 	}
 }

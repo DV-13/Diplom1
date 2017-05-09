@@ -42,6 +42,12 @@ namespace NNTPReader
 			this.txtBody = new System.Windows.Forms.TextBox();
 			this.lstNewsgroups = new System.Windows.Forms.ListBox();
 			this.lstHeads = new System.Windows.Forms.ListBox();
+			this.headPageL = new System.Windows.Forms.Button();
+			this.headPageR = new System.Windows.Forms.Button();
+			this.lblHeadPage = new System.Windows.Forms.Label();
+			this.tableHeads = new System.Windows.Forms.TableLayoutPanel();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnGo
@@ -73,17 +79,17 @@ namespace NNTPReader
 			// 
 			// txtLog
 			// 
-			this.txtLog.Location = new System.Drawing.Point(12, 494);
+			this.txtLog.Location = new System.Drawing.Point(939, 482);
 			this.txtLog.Multiline = true;
 			this.txtLog.Name = "txtLog";
 			this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtLog.Size = new System.Drawing.Size(922, 129);
+			this.txtLog.Size = new System.Drawing.Size(405, 329);
 			this.txtLog.TabIndex = 3;
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(9, 478);
+			this.label2.Location = new System.Drawing.Point(936, 466);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(28, 13);
 			this.label2.TabIndex = 4;
@@ -110,7 +116,7 @@ namespace NNTPReader
 			// 
 			// btnNext
 			// 
-			this.btnNext.Location = new System.Drawing.Point(1214, 103);
+			this.btnNext.Location = new System.Drawing.Point(486, 482);
 			this.btnNext.Name = "btnNext";
 			this.btnNext.Size = new System.Drawing.Size(133, 23);
 			this.btnNext.TabIndex = 8;
@@ -121,7 +127,7 @@ namespace NNTPReader
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(671, 116);
+			this.label4.Location = new System.Drawing.Point(9, 495);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(36, 13);
 			this.label4.TabIndex = 9;
@@ -129,17 +135,17 @@ namespace NNTPReader
 			// 
 			// txtHead
 			// 
-			this.txtHead.Location = new System.Drawing.Point(674, 132);
+			this.txtHead.Location = new System.Drawing.Point(12, 511);
 			this.txtHead.Multiline = true;
 			this.txtHead.Name = "txtHead";
 			this.txtHead.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtHead.Size = new System.Drawing.Size(673, 67);
+			this.txtHead.Size = new System.Drawing.Size(607, 96);
 			this.txtHead.TabIndex = 10;
 			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(671, 210);
+			this.label5.Location = new System.Drawing.Point(9, 610);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(34, 13);
 			this.label5.TabIndex = 11;
@@ -147,11 +153,11 @@ namespace NNTPReader
 			// 
 			// txtBody
 			// 
-			this.txtBody.Location = new System.Drawing.Point(674, 226);
+			this.txtBody.Location = new System.Drawing.Point(12, 626);
 			this.txtBody.Multiline = true;
 			this.txtBody.Name = "txtBody";
 			this.txtBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtBody.Size = new System.Drawing.Size(673, 140);
+			this.txtBody.Size = new System.Drawing.Size(607, 185);
 			this.txtBody.TabIndex = 12;
 			// 
 			// lstNewsgroups
@@ -166,16 +172,78 @@ namespace NNTPReader
 			// lstHeads
 			// 
 			this.lstHeads.FormattingEnabled = true;
-			this.lstHeads.Location = new System.Drawing.Point(248, 103);
+			this.lstHeads.Location = new System.Drawing.Point(625, 482);
 			this.lstHeads.Name = "lstHeads";
-			this.lstHeads.Size = new System.Drawing.Size(227, 342);
+			this.lstHeads.Size = new System.Drawing.Size(308, 329);
 			this.lstHeads.TabIndex = 14;
+			// 
+			// headPageL
+			// 
+			this.headPageL.Enabled = false;
+			this.headPageL.Location = new System.Drawing.Point(256, 82);
+			this.headPageL.Name = "headPageL";
+			this.headPageL.Size = new System.Drawing.Size(22, 23);
+			this.headPageL.TabIndex = 15;
+			this.headPageL.Text = "<";
+			this.headPageL.UseVisualStyleBackColor = true;
+			this.headPageL.Click += new System.EventHandler(this.headPageL_Click);
+			// 
+			// headPageR
+			// 
+			this.headPageR.Location = new System.Drawing.Point(461, 82);
+			this.headPageR.Name = "headPageR";
+			this.headPageR.Size = new System.Drawing.Size(22, 23);
+			this.headPageR.TabIndex = 16;
+			this.headPageR.Text = ">";
+			this.headPageR.UseVisualStyleBackColor = true;
+			this.headPageR.Click += new System.EventHandler(this.headPageR_Click);
+			// 
+			// lblHeadPage
+			// 
+			this.lblHeadPage.Location = new System.Drawing.Point(284, 82);
+			this.lblHeadPage.Name = "lblHeadPage";
+			this.lblHeadPage.Size = new System.Drawing.Size(171, 23);
+			this.lblHeadPage.TabIndex = 17;
+			this.lblHeadPage.Text = "Страница 1";
+			this.lblHeadPage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// tableHeads
+			// 
+			this.tableHeads.AutoSize = true;
+			this.tableHeads.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.tableHeads.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+			this.tableHeads.ColumnCount = 3;
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+			this.tableHeads.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableHeads.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+			this.tableHeads.Location = new System.Drawing.Point(0, 0);
+			this.tableHeads.Name = "tableHeads";
+			this.tableHeads.RowCount = 1;
+			this.tableHeads.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableHeads.Size = new System.Drawing.Size(1089, 22);
+			this.tableHeads.TabIndex = 18;
+			// 
+			// panel1
+			// 
+			this.panel1.AutoScroll = true;
+			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.Controls.Add(this.tableHeads);
+			this.panel1.Location = new System.Drawing.Point(256, 103);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(1091, 342);
+			this.panel1.TabIndex = 19;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1359, 635);
+			this.ClientSize = new System.Drawing.Size(1359, 823);
+			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.lblHeadPage);
+			this.Controls.Add(this.headPageR);
+			this.Controls.Add(this.headPageL);
 			this.Controls.Add(this.lstHeads);
 			this.Controls.Add(this.lstNewsgroups);
 			this.Controls.Add(this.txtBody);
@@ -195,6 +263,8 @@ namespace NNTPReader
 			this.Name = "Form1";
 			this.Text = "NNTP Reader";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -216,6 +286,11 @@ namespace NNTPReader
         private System.Windows.Forms.TextBox txtBody;
 		private System.Windows.Forms.ListBox lstNewsgroups;
 		private System.Windows.Forms.ListBox lstHeads;
+		private System.Windows.Forms.Button headPageL;
+		private System.Windows.Forms.Button headPageR;
+		private System.Windows.Forms.Label lblHeadPage;
+		private System.Windows.Forms.TableLayoutPanel tableHeads;
+		private System.Windows.Forms.Panel panel1;
 	}
 }
 
