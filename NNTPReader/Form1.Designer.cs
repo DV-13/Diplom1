@@ -51,7 +51,7 @@ namespace NNTPReader
 			this.‡‡ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.‡ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.Ò˚ÒToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.articleControl1 = new NNTPReader.articleControl();
+			this.articleControl = new NNTPReader.articleControl();
 			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -240,21 +240,21 @@ namespace NNTPReader
 			this.Ò˚ÒToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
 			this.Ò˚ÒToolStripMenuItem.Text = "Ò˚Ò";
 			// 
-			// articleControl1
+			// articleControl
 			// 
-			this.articleControl1.AutoSize = true;
-			this.articleControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.articleControl1.Location = new System.Drawing.Point(427, 53);
-			this.articleControl1.Name = "articleControl1";
-			this.articleControl1.Size = new System.Drawing.Size(653, 410);
-			this.articleControl1.TabIndex = 16;
+			this.articleControl.AutoSize = true;
+			this.articleControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.articleControl.Location = new System.Drawing.Point(427, 53);
+			this.articleControl.Name = "articleControl";
+			this.articleControl.Size = new System.Drawing.Size(653, 410);
+			this.articleControl.TabIndex = 16;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1359, 823);
-			this.Controls.Add(this.articleControl1);
+			this.Controls.Add(this.articleControl);
 			this.Controls.Add(this.lstHeads);
 			this.Controls.Add(this.lstNewsgroups);
 			this.Controls.Add(this.txtBody);
@@ -304,7 +304,7 @@ namespace NNTPReader
 		private System.Windows.Forms.ToolStripMenuItem ÈÛÈToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ‡‡ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ‡ToolStripMenuItem;
-		private articleControl articleControl1;
+		private articleControl articleControl;
 	}
 }
 
