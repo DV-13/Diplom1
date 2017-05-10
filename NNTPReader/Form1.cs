@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+//using System.Collections.Generic;
+//using System.ComponentModel;
+//using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -29,8 +29,8 @@ namespace NNTPReader
 		int lastID;
 		// Stores chunks of the articles from the buffer
 		string NewChunk;
-		// Страница списка заголовков
-		int headPage = 1;
+		// Количество отображенных артиклов
+		int artNum = 1;
 
 		public Form1()
 		{
@@ -60,7 +60,7 @@ namespace NNTPReader
 		private void lstNewsgroups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			GetNews();
-			GetHeads();
+			//GetHeads();
 		}
 
 		public static byte[] StringToByteArr(string str)
@@ -349,6 +349,25 @@ namespace NNTPReader
 			}
 			return outHead;
 		}
+
+		/// <summary>
+		/// Quit server when exiting program
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (tcpClient != null && tcpClient.Connected == true)
+			{
+				downBuffer = new byte[2048];
+				// Request a certain newsgroup
+				byteSendInfo = StringToByteArr("QUIT\r\n");
+				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
+				bytesSize = strRemote.Read(downBuffer, 0, 2048);
+				txtLog.AppendText(Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
+			}
+		}
+
 		/*
 		private string formatHead(string inHead)
 		{
@@ -381,7 +400,7 @@ namespace NNTPReader
 		}
 		*/
 
-
+		/*
 		/// <summary>
 		/// Get list of heads
 		/// </summary>
@@ -412,58 +431,21 @@ namespace NNTPReader
 				tableHeads.Controls.Add(new Label() { Text = hTemp[3], Anchor = AnchorStyles.Left, AutoSize = true }, 3, i + 1);
 			}
 		}
+		*/
 
 
-		/// <summary>
-		/// Quit server when exiting program
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			if (tcpClient != null && tcpClient.Connected == true)
-			{
-				downBuffer = new byte[2048];
-				// Request a certain newsgroup
-				byteSendInfo = StringToByteArr("QUIT\r\n");
-				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
-				bytesSize = strRemote.Read(downBuffer, 0, 2048);
-				txtLog.AppendText(Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
-			}
-		}
-
-		private void headPageR_Click(object sender, EventArgs e)
-		{
-			headPage++;
-			lblHeadPage.Text = "Страница " + headPage;
-			headPageL.Enabled = true;
-			tableHeads.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableHeads.RowCount++;
-
-		}
-
-		private void headPageL_Click(object sender, EventArgs e)
-		{
-			headPage--;
-			lblHeadPage.Text = "Страница " + headPage;
-			if (headPage == 1)
-				headPageL.Enabled = false;
-			tableHeads.RowCount--;
-			tableHeads.Height -= 20;
-		}
-
-		public string CutString(string str, int length)
-		{
-			if (str.Length > length)
-				return str.Substring(0, length - 3) + "...";
-			else if (str.Length < length)
-			{
-				for (int i = 0; str.Length <= length; i++)
-				{
-					str += "_";
-				}
-			}
-			return str;
-		}
+		//public string CutString(string str, int length)
+		//{
+		//	if (str.Length > length)
+		//		return str.Substring(0, length - 3) + "...";
+		//	else if (str.Length < length)
+		//	{
+		//		for (int i = 0; str.Length <= length; i++)
+		//		{
+		//			str += "_";
+		//		}
+		//	}
+		//	return str;
+		//}
 	}
 }

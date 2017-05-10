@@ -28,6 +28,7 @@ namespace NNTPReader
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			this.btnGo = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtNNTPServer = new System.Windows.Forms.TextBox();
@@ -42,12 +43,16 @@ namespace NNTPReader
 			this.txtBody = new System.Windows.Forms.TextBox();
 			this.lstNewsgroups = new System.Windows.Forms.ListBox();
 			this.lstHeads = new System.Windows.Forms.ListBox();
-			this.headPageL = new System.Windows.Forms.Button();
-			this.headPageR = new System.Windows.Forms.Button();
-			this.lblHeadPage = new System.Windows.Forms.Label();
-			this.tableHeads = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel1.SuspendLayout();
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.Ò‡ÒToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ÒÎ˚ÎÒToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.‡ÈÛÈ‡ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ÈÛÈToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.‡‡ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.‡ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.Ò˚ÒToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.articleControl1 = new NNTPReader.articleControl();
+			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnGo
@@ -177,73 +182,79 @@ namespace NNTPReader
 			this.lstHeads.Size = new System.Drawing.Size(308, 329);
 			this.lstHeads.TabIndex = 14;
 			// 
-			// headPageL
+			// contextMenuStrip1
 			// 
-			this.headPageL.Enabled = false;
-			this.headPageL.Location = new System.Drawing.Point(256, 82);
-			this.headPageL.Name = "headPageL";
-			this.headPageL.Size = new System.Drawing.Size(22, 23);
-			this.headPageL.TabIndex = 15;
-			this.headPageL.Text = "<";
-			this.headPageL.UseVisualStyleBackColor = true;
-			this.headPageL.Click += new System.EventHandler(this.headPageL_Click);
+			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Ò‡ÒToolStripMenuItem,
+            this.ÒÎ˚ÎÒToolStripMenuItem,
+            this.‡ÈÛÈ‡ToolStripMenuItem});
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(110, 70);
 			// 
-			// headPageR
+			// Ò‡ÒToolStripMenuItem
 			// 
-			this.headPageR.Location = new System.Drawing.Point(461, 82);
-			this.headPageR.Name = "headPageR";
-			this.headPageR.Size = new System.Drawing.Size(22, 23);
-			this.headPageR.TabIndex = 16;
-			this.headPageR.Text = ">";
-			this.headPageR.UseVisualStyleBackColor = true;
-			this.headPageR.Click += new System.EventHandler(this.headPageR_Click);
+			this.Ò‡ÒToolStripMenuItem.Name = "Ò‡ÒToolStripMenuItem";
+			this.Ò‡ÒToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+			this.Ò‡ÒToolStripMenuItem.Text = "Ò‡Ò";
 			// 
-			// lblHeadPage
+			// ÒÎ˚ÎÒToolStripMenuItem
 			// 
-			this.lblHeadPage.Location = new System.Drawing.Point(284, 82);
-			this.lblHeadPage.Name = "lblHeadPage";
-			this.lblHeadPage.Size = new System.Drawing.Size(171, 23);
-			this.lblHeadPage.TabIndex = 17;
-			this.lblHeadPage.Text = "—Ú‡ÌËˆ‡ 1";
-			this.lblHeadPage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.ÒÎ˚ÎÒToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Ò˚ÒToolStripMenuItem});
+			this.ÒÎ˚ÎÒToolStripMenuItem.Name = "ÒÎ˚ÎÒToolStripMenuItem";
+			this.ÒÎ˚ÎÒToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+			this.ÒÎ˚ÎÒToolStripMenuItem.Text = "ÒÎ˚ÎÒ";
 			// 
-			// tableHeads
+			// ‡ÈÛÈ‡ToolStripMenuItem
 			// 
-			this.tableHeads.AutoSize = true;
-			this.tableHeads.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.tableHeads.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-			this.tableHeads.ColumnCount = 4;
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-			this.tableHeads.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
-			this.tableHeads.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableHeads.Location = new System.Drawing.Point(0, 0);
-			this.tableHeads.Name = "tableHeads";
-			this.tableHeads.RowCount = 1;
-			this.tableHeads.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-			this.tableHeads.Size = new System.Drawing.Size(1089, 23);
-			this.tableHeads.TabIndex = 18;
+			this.‡ÈÛÈ‡ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ÈÛÈToolStripMenuItem,
+            this.‡‡ToolStripMenuItem});
+			this.‡ÈÛÈ‡ToolStripMenuItem.Name = "‡ÈÛÈ‡ToolStripMenuItem";
+			this.‡ÈÛÈ‡ToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+			this.‡ÈÛÈ‡ToolStripMenuItem.Text = "‡ÈÛÈ‡";
 			// 
-			// panel1
+			// ÈÛÈToolStripMenuItem
 			// 
-			this.panel1.AutoScroll = true;
-			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Controls.Add(this.tableHeads);
-			this.panel1.Location = new System.Drawing.Point(256, 103);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(1091, 342);
-			this.panel1.TabIndex = 19;
+			this.ÈÛÈToolStripMenuItem.Name = "ÈÛÈToolStripMenuItem";
+			this.ÈÛÈToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+			this.ÈÛÈToolStripMenuItem.Text = "ÈÛÈ";
+			// 
+			// ‡‡ToolStripMenuItem
+			// 
+			this.‡‡ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.‡ToolStripMenuItem});
+			this.‡‡ToolStripMenuItem.Name = "‡‡ToolStripMenuItem";
+			this.‡‡ToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+			this.‡‡ToolStripMenuItem.Text = "‡‡";
+			// 
+			// ‡ToolStripMenuItem
+			// 
+			this.‡ToolStripMenuItem.Name = "‡ToolStripMenuItem";
+			this.‡ToolStripMenuItem.Size = new System.Drawing.Size(80, 22);
+			this.‡ToolStripMenuItem.Text = "‡";
+			// 
+			// Ò˚ÒToolStripMenuItem
+			// 
+			this.Ò˚ÒToolStripMenuItem.Name = "Ò˚ÒToolStripMenuItem";
+			this.Ò˚ÒToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+			this.Ò˚ÒToolStripMenuItem.Text = "Ò˚Ò";
+			// 
+			// articleControl1
+			// 
+			this.articleControl1.AutoSize = true;
+			this.articleControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.articleControl1.Location = new System.Drawing.Point(427, 53);
+			this.articleControl1.Name = "articleControl1";
+			this.articleControl1.Size = new System.Drawing.Size(653, 410);
+			this.articleControl1.TabIndex = 16;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1359, 823);
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.lblHeadPage);
-			this.Controls.Add(this.headPageR);
-			this.Controls.Add(this.headPageL);
+			this.Controls.Add(this.articleControl1);
 			this.Controls.Add(this.lstHeads);
 			this.Controls.Add(this.lstNewsgroups);
 			this.Controls.Add(this.txtBody);
@@ -263,8 +274,7 @@ namespace NNTPReader
 			this.Name = "Form1";
 			this.Text = "NNTP Reader";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
+			this.contextMenuStrip1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -286,11 +296,15 @@ namespace NNTPReader
         private System.Windows.Forms.TextBox txtBody;
 		private System.Windows.Forms.ListBox lstNewsgroups;
 		private System.Windows.Forms.ListBox lstHeads;
-		private System.Windows.Forms.Button headPageL;
-		private System.Windows.Forms.Button headPageR;
-		private System.Windows.Forms.Label lblHeadPage;
-		private System.Windows.Forms.TableLayoutPanel tableHeads;
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem Ò‡ÒToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ÒÎ˚ÎÒToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem Ò˚ÒToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ‡ÈÛÈ‡ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ÈÛÈToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ‡‡ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ‡ToolStripMenuItem;
+		private articleControl articleControl1;
 	}
 }
 
