@@ -392,6 +392,7 @@ namespace NNTPReader
 			//tableHeads.RowCount = 0;
 			//tableHeads.Height = 20;
 			int i = 0;
+			tableHeads.SuspendLayout();
 			while (NextArticle() && (i <= 100))
 			{
 				string[] hTemp = formatHead(GetHead());
@@ -411,6 +412,7 @@ namespace NNTPReader
 				tableHeads.Controls.Add(new Label() { Text = hTemp[2], Anchor = AnchorStyles.Left, AutoSize = true }, 2, i + 1);
 				tableHeads.Controls.Add(new Label() { Text = hTemp[3], Anchor = AnchorStyles.Left, AutoSize = true }, 3, i + 1);
 			}
+			tableHeads.ResumeLayout();
 		}
 
 
