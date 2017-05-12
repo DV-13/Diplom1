@@ -9,7 +9,7 @@ using System.Net.Sockets;
 
 namespace NNTPReader
 {
-	public partial class Form1 : Form
+	public partial class fMain : Form
 	{
 		// Used for receiving info
 		byte[] downBuffer = new byte[2048];
@@ -32,7 +32,7 @@ namespace NNTPReader
 		// Stores chunks of the articles from the buffer
 		string NewChunk;
 
-		public Form1()
+		public fMain()
 		{
 			InitializeComponent();
 			Connect();
@@ -66,6 +66,11 @@ namespace NNTPReader
 			}
 		}
 
+		private void btnLogClose_Click(object sender, EventArgs e)
+		{
+			pnlLog.Hide();
+		}
+
 		private void lstNewsgroups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			GetNews();
@@ -94,6 +99,8 @@ namespace NNTPReader
 				txtLog.AppendText("Failed to connect to server\r\n" + ex + "\r\n");
 				return;
 			}
+			txtBody.Clear();
+			txtHead.Clear();
 			strRemote = tcpClient.GetStream();
 			// Read the bytes
 			bytesSize = strRemote.Read(downBuffer, 0, 2048);
@@ -105,7 +112,7 @@ namespace NNTPReader
 				MessageBox.Show("The server returned an unexpected response.", "Connection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			// Show the response
-			txtLog.Text = Response + "\n";
+			txtLog.Text += Response + "\n";
 
 			// Make the request to list all newsgroups
 			byteSendInfo = StringToByteArr("LIST\r\n");
@@ -481,6 +488,11 @@ namespace NNTPReader
 				bytesSize = strRemote.Read(downBuffer, 0, 2048);
 				txtLog.AppendText(Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
 			}
+		}
+
+		private void btnLogShow_Click(object sender, EventArgs e)
+		{
+			pnlLog.Show();
 		}
 
 		/*

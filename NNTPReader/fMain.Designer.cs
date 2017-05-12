@@ -1,6 +1,6 @@
 namespace NNTPReader
 {
-    partial class Form1
+    partial class fMain
     {
         /// <summary>
         /// Required designer variable.
@@ -41,8 +41,11 @@ namespace NNTPReader
 			this.label5 = new System.Windows.Forms.Label();
 			this.txtBody = new System.Windows.Forms.TextBox();
 			this.lstNewsgroups = new System.Windows.Forms.ListBox();
-			this.lstHeads = new System.Windows.Forms.ListBox();
 			this.btnLast = new System.Windows.Forms.Button();
+			this.pnlLog = new System.Windows.Forms.Panel();
+			this.btnLogClose = new System.Windows.Forms.Button();
+			this.btnLogShow = new System.Windows.Forms.Button();
+			this.pnlLog.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnGo
@@ -74,17 +77,18 @@ namespace NNTPReader
 			// 
 			// txtLog
 			// 
-			this.txtLog.Location = new System.Drawing.Point(939, 482);
+			this.txtLog.Location = new System.Drawing.Point(-1, 29);
 			this.txtLog.Multiline = true;
 			this.txtLog.Name = "txtLog";
+			this.txtLog.ReadOnly = true;
 			this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtLog.Size = new System.Drawing.Size(405, 329);
+			this.txtLog.Size = new System.Drawing.Size(633, 584);
 			this.txtLog.TabIndex = 3;
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(936, 466);
+			this.label2.Location = new System.Drawing.Point(3, 5);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(28, 13);
 			this.label2.TabIndex = 4;
@@ -164,14 +168,6 @@ namespace NNTPReader
 			this.lstNewsgroups.TabIndex = 13;
 			this.lstNewsgroups.SelectedIndexChanged += new System.EventHandler(this.lstNewsgroups_SelectedIndexChanged);
 			// 
-			// lstHeads
-			// 
-			this.lstHeads.FormattingEnabled = true;
-			this.lstHeads.Location = new System.Drawing.Point(625, 482);
-			this.lstHeads.Name = "lstHeads";
-			this.lstHeads.Size = new System.Drawing.Size(308, 329);
-			this.lstHeads.TabIndex = 14;
-			// 
 			// btnLast
 			// 
 			this.btnLast.Location = new System.Drawing.Point(324, 482);
@@ -182,13 +178,45 @@ namespace NNTPReader
 			this.btnLast.UseVisualStyleBackColor = true;
 			this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
 			// 
-			// Form1
+			// pnlLog
+			// 
+			this.pnlLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pnlLog.Controls.Add(this.txtLog);
+			this.pnlLog.Controls.Add(this.btnLogClose);
+			this.pnlLog.Controls.Add(this.label2);
+			this.pnlLog.Location = new System.Drawing.Point(648, 40);
+			this.pnlLog.Name = "pnlLog";
+			this.pnlLog.Size = new System.Drawing.Size(633, 614);
+			this.pnlLog.TabIndex = 17;
+			// 
+			// btnLogClose
+			// 
+			this.btnLogClose.Location = new System.Drawing.Point(605, 0);
+			this.btnLogClose.Name = "btnLogClose";
+			this.btnLogClose.Size = new System.Drawing.Size(26, 23);
+			this.btnLogClose.TabIndex = 16;
+			this.btnLogClose.Text = "X";
+			this.btnLogClose.UseVisualStyleBackColor = true;
+			this.btnLogClose.Click += new System.EventHandler(this.btnLogClose_Click);
+			// 
+			// btnLogShow
+			// 
+			this.btnLogShow.Location = new System.Drawing.Point(466, 15);
+			this.btnLogShow.Name = "btnLogShow";
+			this.btnLogShow.Size = new System.Drawing.Size(75, 23);
+			this.btnLogShow.TabIndex = 18;
+			this.btnLogShow.Text = "Log";
+			this.btnLogShow.UseVisualStyleBackColor = true;
+			this.btnLogShow.Click += new System.EventHandler(this.btnLogShow_Click);
+			// 
+			// fMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1359, 823);
+			this.Controls.Add(this.btnLogShow);
+			this.Controls.Add(this.pnlLog);
 			this.Controls.Add(this.btnLast);
-			this.Controls.Add(this.lstHeads);
 			this.Controls.Add(this.lstNewsgroups);
 			this.Controls.Add(this.txtBody);
 			this.Controls.Add(this.label5);
@@ -197,16 +225,16 @@ namespace NNTPReader
 			this.Controls.Add(this.btnNext);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.btnGetNews);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.txtLog);
 			this.Controls.Add(this.txtNNTPServer);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.btnGo);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.Name = "Form1";
+			this.Name = "fMain";
 			this.Text = "NNTP Reader";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+			this.pnlLog.ResumeLayout(false);
+			this.pnlLog.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -227,8 +255,10 @@ namespace NNTPReader
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtBody;
 		private System.Windows.Forms.ListBox lstNewsgroups;
-		private System.Windows.Forms.ListBox lstHeads;
 		private System.Windows.Forms.Button btnLast;
+		private System.Windows.Forms.Panel pnlLog;
+		private System.Windows.Forms.Button btnLogClose;
+		private System.Windows.Forms.Button btnLogShow;
 	}
 }
 
