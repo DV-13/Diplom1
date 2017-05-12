@@ -25,12 +25,12 @@ namespace NNTPReader
 		int bytesSize;
 		// Stores the ID of the first message in a newsgroup
 		int firstID;
+		// Stores the ID of the current message in a newsgroup
+		int currID;
 		// Stores the ID of the last message in a newsgroup
 		int lastID;
 		// Stores chunks of the articles from the buffer
 		string NewChunk;
-		// Страница списка заголовков
-		int headPage = 1;
 
 		public Form1()
 		{
@@ -172,8 +172,8 @@ namespace NNTPReader
 				if (Group.Length > 0)
 				{
 					Response += Group[0] + " " + Group[1] + " messages in the group (" + Group[2] + "..." + Group[3] + ")\r\n";
-					// The ID of the first article in this newsgroup
-					firstID = Convert.ToInt32(Group[2]);
+					// The ID of the first and current article in this newsgroup
+					firstID = currID = Convert.ToInt32(Group[2]);
 					// The ID of the last article in this newsgroup
 					lastID = Convert.ToInt32(Group[3]);
 				}
@@ -181,7 +181,6 @@ namespace NNTPReader
 					Response += "004 Unexpected answer form server\r\n";
 				txtLog.AppendText(Response);
 				Response = "";
-
 			}
 			else
 			{
@@ -211,7 +210,7 @@ namespace NNTPReader
 				{
 					Response += Group[0] + " Next article ID is " + Group[1] + "\r\n";
 					// The ID of the next article
-					firstID = Convert.ToInt32(Group[1]);
+					currID = Convert.ToInt32(Group[1]);
 					ret = true;
 				}
 				else if (Group.Length > 0 && Group[0] == "421")
@@ -223,7 +222,7 @@ namespace NNTPReader
 					Response += "Unexpected answer form server/No articles\r\n";
 				}
 				//txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
-				txtLog.AppendText(Response /*+ firstID + "\r\n"*/);
+				txtLog.AppendText(Response /*+ currID + "\r\n"*/);
 				Response = "";
 			}
 			return ret;
@@ -251,7 +250,7 @@ namespace NNTPReader
 				{
 					Response += Group[0] + " Last article ID is " + Group[1] + "\r\n";
 					// The ID of the next article
-					firstID = Convert.ToInt32(Group[1]);
+					currID = Convert.ToInt32(Group[1]);
 					ret = true;
 				}
 				else if (Group.Length > 0 && Group[0] == "422")
@@ -263,7 +262,7 @@ namespace NNTPReader
 					Response += "Unexpected answer form server/No articles\r\n";
 				}
 				//txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
-				txtLog.AppendText(Response /*+ firstID + "\r\n"*/);
+				txtLog.AppendText(Response /*+ currID + "\r\n"*/);
 				Response = "";
 			}
 			return ret;
@@ -277,7 +276,7 @@ namespace NNTPReader
 		/// </returns>
 		private string GetHead()
 		{
-			if (tcpClient != null && tcpClient.Connected == true /*&& firstID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
+			if (tcpClient != null && tcpClient.Connected == true /*&& currID >= 0*/ && lstNewsgroups.SelectedIndex != -1)
 			{
 				string headTmp = "";
 				// Get the header
@@ -285,7 +284,7 @@ namespace NNTPReader
 				// Initialize the buffer to 2048 bytes
 				downBuffer = new byte[2048];
 				// Request the headers of the article
-				byteSendInfo = StringToByteArr("HEAD " + firstID + "\r\n");
+				byteSendInfo = StringToByteArr("HEAD " + currID + "\r\n");
 				// Send the request to the NNTP server
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				while ((bytesSize = strRemote.Read(downBuffer, 0, downBuffer.Length)) > 0)
@@ -296,7 +295,7 @@ namespace NNTPReader
 					if (NewChunk.Substring(0, 3) == "423")
 					{
 						// Ready for the next article, unless there is nothing else there...
-						if (firstID >= lastID)
+						if (currID >= lastID)
 						{
 							txtLog.AppendText("002 Last article\r\n");
 							return null;
@@ -341,7 +340,7 @@ namespace NNTPReader
 				// Initialize the buffer to 2048 bytes
 				downBuffer = new byte[2048];
 				// Request the headers of the article
-				byteSendInfo = StringToByteArr("BODY " + firstID + "\r\n");
+				byteSendInfo = StringToByteArr("BODY " + currID + "\r\n");
 				// Send the request to the NNTP server
 				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
 				while ((bytesSize = strRemote.Read(downBuffer, 0, downBuffer.Length)) > 0)
@@ -359,7 +358,7 @@ namespace NNTPReader
 						break;
 					}
 				}
-				txtLog.AppendText("000 Displaying article\r\n");
+				txtLog.AppendText("000 Displaying article" + currID + "\r\n");
 				//txtBody.Text = bodyTmp;
 				return bodyTmp;
 			}
