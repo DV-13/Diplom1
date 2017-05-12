@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fLog.Designer.cs">
+      <DependentUpon>fLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="fMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,6 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="fLog.resx">
+      <DependentUpon>fLog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="fMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>fMain.cs</DependentUpon>
