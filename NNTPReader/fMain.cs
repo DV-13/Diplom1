@@ -221,7 +221,7 @@ namespace NNTPReader
 					}
 					else
 					{
-						lblGroupInfo.Text = Group[1] + " messages in the group";
+						lblGroupInfo.Text = Group[1] + " messages in the group " + treeNewsgroups.SelectedNode.FullPath;
 						ret = true;
 					}
 				}

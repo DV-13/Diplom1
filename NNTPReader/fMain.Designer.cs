@@ -31,7 +31,6 @@ namespace NNTPReader
 			this.btnGo = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtNNTPServer = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.btnNext = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.txtHead = new System.Windows.Forms.TextBox();
@@ -53,7 +52,7 @@ namespace NNTPReader
 			// 
 			// btnGo
 			// 
-			this.btnGo.Location = new System.Drawing.Point(182, 24);
+			this.btnGo.Location = new System.Drawing.Point(272, 0);
 			this.btnGo.Name = "btnGo";
 			this.btnGo.Size = new System.Drawing.Size(75, 23);
 			this.btnGo.TabIndex = 2;
@@ -64,32 +63,24 @@ namespace NNTPReader
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 29);
+			this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.label1.Location = new System.Drawing.Point(101, 4);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(74, 13);
+			this.label1.Size = new System.Drawing.Size(42, 15);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "NNTP Server:";
+			this.label1.Text = "Server:";
 			// 
 			// txtNNTPServer
 			// 
-			this.txtNNTPServer.Location = new System.Drawing.Point(15, 53);
+			this.txtNNTPServer.Location = new System.Drawing.Point(149, 2);
 			this.txtNNTPServer.Name = "txtNNTPServer";
-			this.txtNNTPServer.Size = new System.Drawing.Size(242, 20);
+			this.txtNNTPServer.Size = new System.Drawing.Size(117, 20);
 			this.txtNNTPServer.TabIndex = 1;
 			this.txtNNTPServer.Text = "news.gweep.ca";
 			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(12, 79);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(64, 13);
-			this.label3.TabIndex = 7;
-			this.label3.Text = "Newgroups:";
-			// 
 			// btnNext
 			// 
-			this.btnNext.Location = new System.Drawing.Point(344, 51);
+			this.btnNext.Location = new System.Drawing.Point(344, 38);
 			this.btnNext.Name = "btnNext";
 			this.btnNext.Size = new System.Drawing.Size(64, 23);
 			this.btnNext.TabIndex = 4;
@@ -100,7 +91,7 @@ namespace NNTPReader
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(273, 79);
+			this.label4.Location = new System.Drawing.Point(273, 66);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(36, 13);
 			this.label4.TabIndex = 9;
@@ -109,7 +100,7 @@ namespace NNTPReader
 			// txtHead
 			// 
 			this.txtHead.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.txtHead.Location = new System.Drawing.Point(274, 95);
+			this.txtHead.Location = new System.Drawing.Point(274, 82);
 			this.txtHead.Multiline = true;
 			this.txtHead.Name = "txtHead";
 			this.txtHead.ReadOnly = true;
@@ -120,7 +111,7 @@ namespace NNTPReader
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(273, 268);
+			this.label5.Location = new System.Drawing.Point(273, 255);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(34, 13);
 			this.label5.TabIndex = 11;
@@ -129,7 +120,7 @@ namespace NNTPReader
 			// txtBody
 			// 
 			this.txtBody.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.txtBody.Location = new System.Drawing.Point(274, 284);
+			this.txtBody.Location = new System.Drawing.Point(274, 271);
 			this.txtBody.Multiline = true;
 			this.txtBody.Name = "txtBody";
 			this.txtBody.ReadOnly = true;
@@ -139,7 +130,7 @@ namespace NNTPReader
 			// 
 			// btnLast
 			// 
-			this.btnLast.Location = new System.Drawing.Point(274, 51);
+			this.btnLast.Location = new System.Drawing.Point(274, 38);
 			this.btnLast.Name = "btnLast";
 			this.btnLast.Size = new System.Drawing.Size(64, 23);
 			this.btnLast.TabIndex = 5;
@@ -198,7 +189,7 @@ namespace NNTPReader
 			// 
 			// treeNewsgroups
 			// 
-			this.treeNewsgroups.Location = new System.Drawing.Point(12, 95);
+			this.treeNewsgroups.Location = new System.Drawing.Point(12, 82);
 			this.treeNewsgroups.Name = "treeNewsgroups";
 			this.treeNewsgroups.Size = new System.Drawing.Size(245, 598);
 			this.treeNewsgroups.TabIndex = 3;
@@ -206,17 +197,16 @@ namespace NNTPReader
 			// 
 			// lblGroupInfo
 			// 
-			this.lblGroupInfo.AutoSize = true;
-			this.lblGroupInfo.Location = new System.Drawing.Point(122, 79);
+			this.lblGroupInfo.Location = new System.Drawing.Point(12, 43);
 			this.lblGroupInfo.Name = "lblGroupInfo";
-			this.lblGroupInfo.Size = new System.Drawing.Size(138, 13);
+			this.lblGroupInfo.Size = new System.Drawing.Size(245, 36);
 			this.lblGroupInfo.TabIndex = 21;
-			this.lblGroupInfo.Text = "To start select a newsgroup";
+			this.lblGroupInfo.Text = "To start select a newsgroup:";
 			// 
 			// lblMessInfo
 			// 
 			this.lblMessInfo.AutoSize = true;
-			this.lblMessInfo.Location = new System.Drawing.Point(414, 56);
+			this.lblMessInfo.Location = new System.Drawing.Point(414, 43);
 			this.lblMessInfo.Name = "lblMessInfo";
 			this.lblMessInfo.Size = new System.Drawing.Size(13, 13);
 			this.lblMessInfo.TabIndex = 22;
@@ -232,7 +222,7 @@ namespace NNTPReader
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1096, 705);
+			this.ClientSize = new System.Drawing.Size(1096, 694);
 			this.Controls.Add(this.lblMessInfo);
 			this.Controls.Add(this.lblGroupInfo);
 			this.Controls.Add(this.treeNewsgroups);
@@ -242,7 +232,6 @@ namespace NNTPReader
 			this.Controls.Add(this.txtHead);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.btnNext);
-			this.Controls.Add(this.label3);
 			this.Controls.Add(this.txtNNTPServer);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.btnGo);
@@ -265,7 +254,6 @@ namespace NNTPReader
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtNNTPServer;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtHead;
