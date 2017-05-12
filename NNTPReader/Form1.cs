@@ -57,10 +57,20 @@ namespace NNTPReader
 			}
 		}
 
+		private void btnLast_Click(object sender, EventArgs e)
+		{
+			if (LastArticle())
+			{
+				txtHead.Text = GetHead();
+				txtBody.Text = GetBody();
+			}
+		}
+
 		private void lstNewsgroups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			GetNews();
-			GetHeads();
+			txtHead.Text = GetHead();
+			txtBody.Text = GetBody();
 		}
 
 		public static byte[] StringToByteArr(string str)
@@ -207,6 +217,46 @@ namespace NNTPReader
 				else if (Group.Length > 0 && Group[0] == "421")
 				{
 					Response += "421 Last article\r\n";
+				}
+				else
+				{
+					Response += "Unexpected answer form server/No articles\r\n";
+				}
+				//txtLog.AppendText(System.Text.Encoding.ASCII.GetString(downBuffer, 0, bytesSize));
+				txtLog.AppendText(Response /*+ firstID + "\r\n"*/);
+				Response = "";
+			}
+			return ret;
+		}
+
+		/// <summary>
+		/// Get ID of previous article
+		/// </summary>
+		/// <returns>
+		/// True - OK
+		/// False - Not OK
+		/// </returns>
+		private bool LastArticle()
+		{
+			bool ret = false;
+			if (tcpClient != null && tcpClient.Connected == true && lstNewsgroups.SelectedIndex != -1)
+			{
+				// Request the next article
+				byteSendInfo = StringToByteArr("LAST\r\n");
+				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
+				bytesSize = strRemote.Read(downBuffer, 0, 2048);
+				string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
+				// Show information about the article in the txtLog TextBox
+				if (Group.Length > 0 && Group[0] == "223")
+				{
+					Response += Group[0] + " Last article ID is " + Group[1] + "\r\n";
+					// The ID of the next article
+					firstID = Convert.ToInt32(Group[1]);
+					ret = true;
+				}
+				else if (Group.Length > 0 && Group[0] == "422")
+				{
+					Response += "422 First article\r\n";
 				}
 				else
 				{
@@ -381,7 +431,7 @@ namespace NNTPReader
 		}
 		*/
 
-
+		/*
 		/// <summary>
 		/// Get list of heads
 		/// </summary>
@@ -414,7 +464,7 @@ namespace NNTPReader
 			}
 			tableHeads.ResumeLayout();
 		}
-
+		*/
 
 		/// <summary>
 		/// Quit server when exiting program
@@ -434,26 +484,7 @@ namespace NNTPReader
 			}
 		}
 
-		private void headPageR_Click(object sender, EventArgs e)
-		{
-			headPage++;
-			lblHeadPage.Text = "Страница " + headPage;
-			headPageL.Enabled = true;
-			tableHeads.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableHeads.RowCount++;
-
-		}
-
-		private void headPageL_Click(object sender, EventArgs e)
-		{
-			headPage--;
-			lblHeadPage.Text = "Страница " + headPage;
-			if (headPage == 1)
-				headPageL.Enabled = false;
-			tableHeads.RowCount--;
-			tableHeads.Height -= 20;
-		}
-
+		/*
 		public string CutString(string str, int length)
 		{
 			if (str.Length > length)
@@ -467,5 +498,6 @@ namespace NNTPReader
 			}
 			return str;
 		}
+		*/
 	}
 }
