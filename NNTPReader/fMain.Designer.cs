@@ -76,7 +76,6 @@ namespace NNTPReader
 			this.txtNNTPServer.Name = "txtNNTPServer";
 			this.txtNNTPServer.Size = new System.Drawing.Size(117, 20);
 			this.txtNNTPServer.TabIndex = 1;
-			this.txtNNTPServer.Text = "news.gweep.ca";
 			// 
 			// btnNext
 			// 
@@ -161,7 +160,7 @@ namespace NNTPReader
 			// saveArticleToolStripMenuItem
 			// 
 			this.saveArticleToolStripMenuItem.Name = "saveArticleToolStripMenuItem";
-			this.saveArticleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.saveArticleToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
 			this.saveArticleToolStripMenuItem.Text = "Save Article";
 			this.saveArticleToolStripMenuItem.Click += new System.EventHandler(this.saveArticleToolStripMenuItem_Click);
 			// 

@@ -40,7 +40,7 @@ namespace NNTPReader
 		public fMain()
 		{
 			InitializeComponent();
-			Connect();
+			//Connect();
 		}
 
 		private void btnGo_Click(object sender, EventArgs e)
@@ -116,6 +116,7 @@ namespace NNTPReader
 			}
 			catch (Exception ex)
 			{
+				MessageBox.Show("Unable to connect to server " + txtNNTPServer.Text, "Connection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				fLog.txtLog.AppendText("Failed to connect to server\r\n" + ex + "\r\n");
 				return;
 			}
