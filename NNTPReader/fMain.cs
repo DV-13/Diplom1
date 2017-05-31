@@ -55,10 +55,8 @@ namespace NNTPReader
 			//If there is next article - show it
 			if (NextArticle())
 			{
-				txtHead.Text = GetHead();
-				txtBody.Text = GetBody();
+				GetArtice();
 			}
-			lblMessInfo.Text = "Message " + messCurr + " out of " + messNum;
 		}
 
 		private void btnLast_Click(object sender, EventArgs e)
@@ -66,9 +64,14 @@ namespace NNTPReader
 			//If there is previous article - show it
 			if (LastArticle())
 			{
-				txtHead.Text = GetHead();
-				txtBody.Text = GetBody();
+				GetArtice();
 			}
+		}
+
+		private void GetArtice()
+		{
+			txtHead.Text = GetHead();
+			txtBody.Text = GetBody();
 			lblMessInfo.Text = "Message " + messCurr + " out of " + messNum;
 		}
 
@@ -234,6 +237,11 @@ namespace NNTPReader
 				fLog.txtLog.AppendText(Response);
 				Response = "";
 			}
+			else
+			{
+				fLog.txtLog.AppendText("No connection to server\r\n");
+				MessageBox.Show("No connection to server.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 			return ret;
 		}
 
@@ -247,38 +255,46 @@ namespace NNTPReader
 		private bool NextArticle()
 		{
 			bool ret = false;
-			//Request next article
-			byteSendInfo = StringToByteArr("NEXT\r\n");
-			strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
-			bytesSize = strRemote.Read(downBuffer, 0, 2048);
-			string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
-			//Log information about the article
-			if (Group.Length > 0)
+			if (tcpClient != null && tcpClient.Connected == true)
 			{
-				//All OK
-				if (Group[0] == "223")
+				//Request next article
+				byteSendInfo = StringToByteArr("NEXT\r\n");
+				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
+				bytesSize = strRemote.Read(downBuffer, 0, 2048);
+				string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
+				//Log information about the article
+				if (Group.Length > 0)
 				{
-					Response += Group[0] + " Next article ID is " + Group[1] + "\r\n";
-					//The ID of the next article
-					currID = Convert.ToInt32(Group[1]);
-					messCurr++;
-					ret = true;
+					//All OK
+					if (Group[0] == "223")
+					{
+						Response += Group[0] + " Next article ID is " + Group[1] + "\r\n";
+						//The ID of the next article
+						currID = Convert.ToInt32(Group[1]);
+						messCurr++;
+						ret = true;
+					}
+					else if (Group[0] == "412")
+					{
+						Response = "412 Newsgroup not selected\r\n";
+					}
+					else if (Group[0] == "421")
+					{
+						Response += "421 Last article\r\n";
+					}
 				}
-				else if (Group[0] == "412")
+				else
 				{
-					Response = "412 Newsgroup not selected\r\n";
+					Response += "Unexpected answer form server/No articles\r\n";
 				}
-				else if (Group[0] == "421")
-				{
-					Response += "421 Last article\r\n";
-				}
+				fLog.txtLog.AppendText(Response);
+				Response = "";
 			}
 			else
 			{
-				Response += "Unexpected answer form server/No articles\r\n";
+				fLog.txtLog.AppendText("No connection to server\r\n");
+				MessageBox.Show("No connection to server.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			fLog.txtLog.AppendText(Response);
-			Response = "";
 			return ret;
 		}
 
@@ -292,41 +308,49 @@ namespace NNTPReader
 		private bool LastArticle()
 		{
 			bool ret = false;
-			//Request last article
-			byteSendInfo = StringToByteArr("LAST\r\n");
-			strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
-			bytesSize = strRemote.Read(downBuffer, 0, 2048);
-			string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
-			//Log information about the article
-			if (Group.Length > 0)
+			if (tcpClient != null && tcpClient.Connected == true)
 			{
-				//All OK
-				if (Group[0] == "223")
+				//Request last article
+				byteSendInfo = StringToByteArr("LAST\r\n");
+				strRemote.Write(byteSendInfo, 0, byteSendInfo.Length);
+				bytesSize = strRemote.Read(downBuffer, 0, 2048);
+				string[] Group = Encoding.ASCII.GetString(downBuffer, 0, bytesSize).Split(' ');
+				//Log information about the article
+				if (Group.Length > 0)
 				{
-					Response += Group[0] + " Last article ID is " + Group[1] + "\r\n";
-					//The ID of the next article
-					currID = Convert.ToInt32(Group[1]);
-					messCurr--;
-					ret = true;
+					//All OK
+					if (Group[0] == "223")
+					{
+						Response += Group[0] + " Last article ID is " + Group[1] + "\r\n";
+						//The ID of the next article
+						currID = Convert.ToInt32(Group[1]);
+						messCurr--;
+						ret = true;
+					}
+					else if (Group[0] == "412")
+					{
+						Response = "412 Newsgroup not selected\r\n";
+						ret = false;
+					}
+					else if (Group[0] == "422")
+					{
+						Response += "422 First article\r\n";
+						ret = false;
+					}
 				}
-				else if (Group[0] == "412")
+				else
 				{
-					Response = "412 Newsgroup not selected\r\n";
+					Response += "Unexpected answer form server/No articles\r\n";
 					ret = false;
 				}
-				else if (Group[0] == "422")
-				{
-					Response += "422 First article\r\n";
-					ret = false;
-				}
+				fLog.txtLog.AppendText(Response);
+				Response = "";
 			}
 			else
 			{
-				Response += "Unexpected answer form server/No articles\r\n";
-				ret = false;
+				fLog.txtLog.AppendText("No connection to server\r\n");
+				MessageBox.Show("No connection to server.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			fLog.txtLog.AppendText(Response);
-			Response = "";
 			return ret;
 		}
 
@@ -522,7 +546,7 @@ namespace NNTPReader
 			else
 			{
 				MessageBox.Show("Nothing to save.", "Saving failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				fLog.txtLog.AppendText("No article to save");
+				fLog.txtLog.AppendText("No article to save\r\n");
 			}
 		}
 	}
